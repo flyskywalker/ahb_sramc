@@ -23,13 +23,6 @@ module sram #(
 
 	logic [7:0] mem[MEM_DEPTH-1:0];
 
-//	integer i;
-//	initial begin
-//		for(i=0; i<MEM_DEPTH;i=i+1) begin
-//			mem[i] = 8'h0; // SRAM_DATA_WIDTH: 8'h0
-//		end
-//	end
-
 	always @(posedge clk) begin
 		if(ce) begin
 			if(we) 
