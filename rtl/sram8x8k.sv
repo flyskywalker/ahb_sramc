@@ -5,16 +5,16 @@
 //				Each bank contains 4 srams.
 //----------------------------------------------------------------------------------------
 
-module sram8x8k (	
-	input sram_clk,	//sramclock
+module sram8x8k (
+	input sram_clk, //sramclock
 	sram_if sram_if_sram //init all ports between arb and sram8x8k
 );
 	sram sram_block0(
 		.clk		(sram_clk),
 		.addr		(sram_if_sram.sram_addr),
 		.data_in	(sram_if_sram.sram_wdata[7:0]),
-		.ce			(sram_if_sram.bank0_cs[0]),
-		.we			(sram_if_sram.sram_we),
+		.ce		(sram_if_sram.bank0_cs[0]),
+		.we		(sram_if_sram.sram_we),
 		.data_out	(sram_if_sram.sram_b0)
 	);
 
@@ -22,8 +22,8 @@ module sram8x8k (
 		.clk		(sram_clk),
 		.addr		(sram_if_sram.sram_addr),
 		.data_in	(sram_if_sram.sram_wdata[15:8]),
-		.ce			(sram_if_sram.bank0_cs[1]),
-		.we			(sram_if_sram.sram_we),
+		.ce		(sram_if_sram.bank0_cs[1]),
+		.we		(sram_if_sram.sram_we),
 		.data_out	(sram_if_sram.sram_b1)
 	);
 
@@ -31,8 +31,8 @@ module sram8x8k (
 		.clk		(sram_clk),
 		.addr		(sram_if_sram.sram_addr),
 		.data_in	(sram_if_sram.sram_wdata[23:16]),
-		.ce			(sram_if_sram.bank0_cs[2]),
-		.we			(sram_if_sram.sram_we),
+		.ce		(sram_if_sram.bank0_cs[2]),
+		.we		(sram_if_sram.sram_we),
 		.data_out	(sram_if_sram.sram_b2)
 	);
 
@@ -40,8 +40,8 @@ module sram8x8k (
 		.clk		(sram_clk),
 		.addr		(sram_if_sram.sram_addr),
 		.data_in	(sram_if_sram.sram_wdata[31:24]),
-		.ce			(sram_if_sram.bank0_cs[3]),
-		.we			(sram_if_sram.sram_we),
+		.ce		(sram_if_sram.bank0_cs[3]),
+		.we		(sram_if_sram.sram_we),
 		.data_out	(sram_if_sram.sram_b3)
 	);
 
@@ -49,8 +49,8 @@ module sram8x8k (
 		.clk		(sram_clk),
 		.addr		(sram_if_sram.sram_addr),
 		.data_in	(sram_if_sram.sram_wdata[7:0]),
-		.ce			(sram_if_sram.bank1_cs[0]),
-		.we			(sram_if_sram.sram_we),
+		.ce		(sram_if_sram.bank1_cs[0]),
+		.we		(sram_if_sram.sram_we),
 		.data_out	(sram_if_sram.sram_b4)
 	);
 
@@ -58,8 +58,8 @@ module sram8x8k (
 		.clk		(sram_clk),
 		.addr		(sram_if_sram.sram_addr),
 		.data_in	(sram_if_sram.sram_wdata[15:8]),
-		.ce			(sram_if_sram.bank1_cs[1]),
-		.we			(sram_if_sram.sram_we),
+		.ce		(sram_if_sram.bank1_cs[1]),
+		.we		(sram_if_sram.sram_we),
 		.data_out	(sram_if_sram.sram_b5)
 	);
 
@@ -67,8 +67,8 @@ module sram8x8k (
 		.clk		(sram_clk),
 		.addr		(sram_if_sram.sram_addr),
 		.data_in	(sram_if_sram.sram_wdata[23:16]),
-		.ce			(sram_if_sram.bank1_cs[2]),
-		.we			(sram_if_sram.sram_we),
+		.ce		(sram_if_sram.bank1_cs[2]),
+		.we		(sram_if_sram.sram_we),
 		.data_out	(sram_if_sram.sram_b6)
 	);
 
@@ -76,8 +76,8 @@ module sram8x8k (
 		.clk		(sram_clk),
 		.addr		(sram_if_sram.sram_addr),
 		.data_in	(sram_if_sram.sram_wdata[31:24]),
-		.ce			(sram_if_sram.bank1_cs[3]),
-		.we			(sram_if_sram.sram_we),
+		.ce		(sram_if_sram.bank1_cs[3]),
+		.we		(sram_if_sram.sram_we),
 		.data_out	(sram_if_sram.sram_b7)
 	);
 
