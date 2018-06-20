@@ -1,3 +1,8 @@
+// Name       : ahb_interface
+// Version    : 1.0
+// Date       : 2018-06-20
+// Description: ahb signals interface
+//----------------------------------------------------------------------------------------
 interface ahb_if#(
 	parameter
 	SRAM_DATA_WIDTH = 8,

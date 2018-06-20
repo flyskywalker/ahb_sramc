@@ -5,40 +5,9 @@
 //				based on IHI0033B_B_amba_5_ahb_protocol_spec.pdf
 //----------------------------------------------------------------------------------------
 
-module ahb_slave_interface	#(
-	parameter
-	SRAM_DATA_WIDTH = 8,
-	SRAM_ADDR_WIDTH = 13,
-	ADDR_WIDTH = 32,
-	DATA_WIDTH = 32,
-	HBURST_WIDTH = 3,
-	HTRANS_WIDTH = 2,
-	HSIZE_WIDTH = 3,
-	HRESP_WIDTH =2
-)
+module ahb_slave_interface	
 	(
-
-	//Global signals
-	input hclk,
-	input hresetn,
-
-	//Master input signals
-	input	[ADDR_WIDTH-1:0]	haddr,
-	input	[DATA_WIDTH-1:0]	hwdata,
-	input	[HBURST_WIDTH-1:0]	hburst,
-	input	[HTRANS_WIDTH-1:0]	htrans,
-	input	[HSIZE_WIDTH-1:0]	hsize,
-
-	//Decoder and Mux input signals
-	input	hsel,
-	input	hwrite,
-	input	hready,
-
-	//output signals
-	output	[DATA_WIDTH-1:0]	hrdata,
-	output	[HRESP_WIDTH-1:0]	hresp,
-	output	hready_resp,
-
+	ahb_if 	ahb_if_inst,
 	sram_if sram_if_ahb //init all ports between arb and sram8x8k
 );
 	parameter
@@ -63,8 +32,8 @@ module ahb_slave_interface	#(
 	logic	[SRAM_ADDR_WIDTH+3-1:0]	srams_addr; //addr for all 8 sram
 	logic	[DATA_WIDTH-1:0]	sram_data_out; //data read from sram and send to AHB bus
 	
-	assign hready_resp = 1'b1;
-	assign hresp = 2'b00;
+	assign ahb_if_inst.hready_resp = 1'b1;
+	assign ahb_if_inst.hresp = 2'b00;
 
 	//sram enable and sram write enable
 	assign srams_en = (htrans_r == NONSEQ) || (htrans_r == SEQ);
@@ -74,8 +43,8 @@ module ahb_slave_interface	#(
 	assign sram_data_out = (bank_sel) ? // if 0, bank0 else bank1
 	{sram_if_ahb.sram_b3, sram_if_ahb.sram_b2, sram_if_ahb.sram_b1, sram_if_ahb.sram_b0} :
 	{sram_if_ahb.sram_b7, sram_if_ahb.sram_b6, sram_if_ahb.sram_b5, sram_if_ahb.sram_b4} ;
-	assign hrdata = sram_data_out;
-	assign sram_if_ahb.sram_wdata = hwdata;
+	assign ahb_if_inst.hrdata = sram_data_out;
+	assign sram_if_ahb.sram_wdata = ahb_if_inst.hwdata;
 
 	//addr	
 	// srams_addr[14:0] for 4 8kbyte srams in one bank
@@ -89,23 +58,23 @@ module ahb_slave_interface	#(
 
 	//signals used to generating sram chip select signal in one bank.
 	assign sram_sel = srams_addr[1:0];
-	assign hsize_sel = hsize_r [1:0];
+	assign ahb_if_inst.hsize_sel = hsize_r [1:0];
 
 	//seq part
-	always@(posedge hclk , negedge hresetn) begin
-		if(!hresetn) begin
+	always@(posedge ahb_if_inst.hclk , negedge ahb_if_inst.hresetn) begin
+		if(!ahb_if_inst.hresetn) begin
 			hwrite_r  <= 1'b0	;
 			hsize_r   <= 3'b0	;
 			hburst_r  <= 3'b0	;
 			htrans_r  <= 2'b0  	;
 			haddr_r   <= 32'b0 	;
 		end
-		else if(hsel && hready) begin
-			hwrite_r  <= hwrite ;
-			hsize_r   <= hsize  ;
-			hburst_r  <= hburst ;
-			htrans_r  <= htrans ;
-			haddr_r   <= haddr 	;
+		else if(ahb_if_inst.hsel && ahb_if_inst.hready) begin
+			hwrite_r  <= ahb_if_inst.hwrite ;
+			hsize_r   <= ahb_if_inst.hsize  ;
+			hburst_r  <= ahb_if_inst.hburst ;
+			htrans_r  <= ahb_if_inst.htrans ;
+			haddr_r   <= ahb_if_inst.haddr 	;
 		end
 		else begin
 			hwrite_r  <= 1'b0	;
@@ -117,12 +86,12 @@ module ahb_slave_interface	#(
 	end
 
 	//comb part
-	always@(hsize_sel or sram_sel) begin
-		if(hsize_sel == 2'b10) //32bit
+	always@(ahb_if_inst.hsize_sel or sram_sel) begin
+		if(ahb_if_inst.hsize_sel == 2'b10) //32bit
 			sram_cs = 4'b1111;
-		else if(hsize_sel == 2'b01) //16bit
+		else if(ahb_if_inst.hsize_sel == 2'b01) //16bit
 			sram_cs = (sram_sel[1] == 1'b0) ? 4'b0011 : 4'b1100; //sram_sel[1] is low, get data from 1st and 2nd srams
-		else if(hsize_sel == 2'b00) begin //8bit
+		else if(ahb_if_inst.hsize_sel == 2'b00) begin //8bit
 			case(sram_sel) //translate sram_sel to sram_cs
 				2'b00 : sram_cs = 4'b0001;
 				2'b01 : sram_cs = 4'b0010;

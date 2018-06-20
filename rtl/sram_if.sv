@@ -1,6 +1,6 @@
-// Name       : arbiter_interface
+// Name       : sram_interface
 // Version    : 1.0
-// Date       : 2018-06-16
+// Date       : 2018-06-20
 // Description: interface between arb and srams
 //----------------------------------------------------------------------------------------
 

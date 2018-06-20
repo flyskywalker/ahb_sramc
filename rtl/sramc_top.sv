@@ -15,23 +15,7 @@ module sramc_top#(
 	HSIZE_WIDTH = 3,
 	HRESP_WIDTH =2
 )(
-	//input signals
-	input	hclk,
-	input	sram_clk,
-	input	hresetn,
-	input	[ADDR_WIDTH-1:0]	haddr,
-	input	[DATA_WIDTH-1:0]	hwdata,
-	input	[HBURST_WIDTH-1:0]	hburst,
-	input	[HTRANS_WIDTH-1:0]	htrans,
-	input	[HSIZE_WIDTH-1:0]	hsize,
-	input	hsel,
-	input	hwrite,
-	input	hready,
-
-	//output signals
-	output	[DATA_WIDTH-1:0]	hrdata,
-	output	[HRESP_WIDTH-1:0]	hresp,
-	output	hready_resp
+	ahb_if 	dut_if_tb,
 );
 
 	sram_if #(
@@ -50,26 +34,12 @@ module sramc_top#(
 	.HSIZE_WIDTH(HSIZE_WIDTH),
 	.HRESP_WIDTH(HRESP_WIDTH)
 	)inst_ahb(
-	.hclk(hclk),
-	.hresetn(hresetn),
-	.haddr(haddr),
-	.hwdata(hwdata),
-	.hburst(hburst),
-	.htrans(htrans),
-	.hsize(hsize),
-	.hsel(hsel),
-	.hwrite(hwrite),
-	.hready(hready),
-	.hrdata(hrdata),
-	.hresp(hresp),
-	.hready_resp(hready_resp),
-//	.arbports(inst_sram_if.arb_ports)
+	.ahb_if_inst(dut_if_tb),
 	.sram_if_ahb(inst_sram_if)
 	);
 
 	sram8x8k inst_srams(
 	.sram_clk(sram_clk),
-//	.sramports(inst_sram_if.sram_ports)
 	.sram_if_sram(inst_sram_if)
 	);
 
