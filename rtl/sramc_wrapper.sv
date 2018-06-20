@@ -1,7 +1,7 @@
-// Name       : sramc_top
+// Name       : sramc_wrapper
 // Version    : 1.0
-// Date       : 2018-06-16
-// Description: toplevel of sramc and ahb, including sram8x8k and ahb_slave_interface
+// Date       : 2018-06-20
+// Description: wrapper the DUT for test
 //----------------------------------------------------------------------------------------
 
 module sramc_wrapper;
