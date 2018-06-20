@@ -14,7 +14,7 @@ interface ahb_if#(
 	HSIZE_WIDTH = 3,
 	HRESP_WIDTH =2
 )(
-		//Global signals
+	//Global signals
 	input hclk,
 	input hresetn);
 
@@ -34,5 +34,16 @@ interface ahb_if#(
 	logic	[DATA_WIDTH-1:0]	hrdata;
 	logic	[HRESP_WIDTH-1:0]	hresp;
 	logic	hready_resp;
-	
+
+	logic	sram_clk;
+
+	parameter period=20;
+
+	initial begin
+		sram_clk = 0;
+		forever
+			begin
+				#(period/2) sram_clk = ~sram_clk;
+			end
+	end
 endinterface

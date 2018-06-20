@@ -17,10 +17,10 @@ module ahb_slave_interface
 	SEQ    = 2'b11;
 
 	//reg for ahb input signals
-	logic	[ADDR_WIDTH-1:0]	haddr_r;
-	logic	[HBURST_WIDTH-1:0]	hburst_r;
-	logic	[HTRANS_WIDTH-1:0]	htrans_r;
-	logic	[HSIZE_WIDTH-1:0]	hsize_r;
+	logic	[ahb_if_inst.ADDR_WIDTH-1:0]	haddr_r;
+	logic	[ahb_if_inst.HBURST_WIDTH-1:0]	hburst_r;
+	logic	[ahb_if_inst.HTRANS_WIDTH-1:0]	htrans_r;
+	logic	[ahb_if_inst.HSIZE_WIDTH-1:0]	hsize_r;
 	logic	hwrite_r;
 
 	logic	[3:0]	sram_cs; //select sram in one bank. second sram:0010
@@ -29,8 +29,8 @@ module ahb_slave_interface
 	logic 	bank_sel;
 	logic 	srams_en;
 
-	logic	[SRAM_ADDR_WIDTH+3-1:0]	srams_addr; //addr for all 8 sram
-	logic	[DATA_WIDTH-1:0]	sram_data_out; //data read from sram and send to AHB bus
+	logic	[ahb_if_inst.SRAM_ADDR_WIDTH+3-1:0]	srams_addr; //addr for all 8 sram
+	logic	[ahb_if_inst.DATA_WIDTH-1:0]	sram_data_out; //data read from sram and send to AHB bus
 	
 	assign ahb_if_inst.hready_resp = 1'b1;
 	assign ahb_if_inst.hresp = 2'b00;
@@ -49,7 +49,7 @@ module ahb_slave_interface
 	//addr	
 	// srams_addr[14:0] for 4 8kbyte srams in one bank
 	// srams_addr[15] for bank select
-	assign srams_addr = haddr_r[SRAM_ADDR_WIDTH+3-1:0];
+	assign srams_addr = haddr_r[ahb_if_inst.SRAM_ADDR_WIDTH+3-1:0];
 	assign sram_if_ahb.sram_addr = srams_addr[14:2]; // addr for 1byte on each sram														
 
 	assign bank_sel = (srams_en && (srams_addr[15] == 1'b0)) ? 1'b0 : 1'b1;
