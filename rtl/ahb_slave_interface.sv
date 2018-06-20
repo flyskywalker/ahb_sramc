@@ -60,8 +60,6 @@ module ahb_slave_interface	#(
 	logic 	bank_sel;
 	logic 	srams_en;
 
-	logic	sram_write;
-	logic	sram_read;
 	logic	[SRAM_ADDR_WIDTH+3-1:0]	srams_addr; //addr for all 8 sram
 	logic	[DATA_WIDTH-1:0]	sram_data_out; //data read from sram and send to AHB bus
 	
@@ -92,9 +90,6 @@ module ahb_slave_interface	#(
 	//signals used to generating sram chip select signal in one bank.
 	assign sram_sel = srams_addr[1:0];
 	assign hsize_sel = hsize_r [1:0];
-
-	assign sram_write = ((htrans_r == NONSEQ) || (htrans_r == SEQ)) && hwrite_r;
-	assign sram_read =  ((htrans_r == NONSEQ) || (htrans_r == SEQ)) && (!hwrite_r);
 
 	//seq part
 	always@(posedge hclk , negedge hresetn) begin
